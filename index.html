@@ -3,34 +3,197 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Jing Ma</title>
+  <meta name="description" content="The personal academic website of Jing Ma. Research, publications, and notes.">
+  <meta name="color-scheme" content="light dark">
+  <title>Jing Ma | Academic Website</title>
+  <script>
+    try {
+      const saved = localStorage.getItem('jingma-theme');
+      if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved;
+    } catch (_) {}
+  </script>
   <style>
-    body {
-      max-width: 760px;
-      margin: 64px auto;
-      padding: 0 24px;
-      font-family: Arial, sans-serif;
-      line-height: 1.8;
-      color: #262626;
-      background: #fafafa;
+    :root { --bg:#fcfbff; --ink:#25232d; --muted:#6b6679; --accent:#6b4bb8; --line:#e3dfeb; --panel:#f1edf8; --header:rgba(252,251,255,.96); color-scheme:light; }
+    :root[data-theme="dark"] { --bg:#19171f; --ink:#eeeaf5; --muted:#b7afc6; --accent:#ba9df5; --line:#393342; --panel:#25202f; --header:rgba(25,23,31,.96); color-scheme:dark; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; scroll-padding-top:110px; }
+    body { margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; font-size:16px; line-height:1.85; }
+    a { color:var(--accent); text-decoration:none; text-underline-offset:4px; }
+    a:hover { text-decoration:underline; }
+    a:focus-visible,button:focus-visible,summary:focus-visible { outline:3px solid var(--accent); outline-offset:5px; border-radius:3px; }
+    button { font:inherit; }
+    .skip-link { position:absolute; top:-80px; left:16px; padding:8px 16px; background:var(--bg); z-index:20; }
+    .skip-link:focus { top:8px; }
+    .wrap { width:min(940px,calc(100% - 48px)); margin-inline:auto; }
+    header { position:sticky; top:0; z-index:10; background:var(--header); border-bottom:1px solid var(--line); }
+    .nav-row { min-height:70px; display:flex; justify-content:space-between; align-items:center; gap:24px; }
+    .wordmark { color:var(--ink); font-family:Georgia,"Times New Roman",serif; font-size:23px; white-space:nowrap; }
+    .wordmark em { color:var(--accent); }
+    nav { display:flex; align-items:center; flex-wrap:wrap; gap:22px; font-size:14px; }
+    nav a { color:var(--muted); }
+    nav a:hover { color:var(--accent); }
+    .theme-toggle { cursor:pointer; display:grid; place-items:center; width:34px; height:34px; padding:0; color:var(--ink); border:1px solid var(--line); border-radius:50%; background:transparent; }
+    .theme-toggle:hover { background:var(--panel); }
+    main { padding-top:52px; }
+    h1,h2,h3 { line-height:1.25; }
+    h1,h2 { font-family:Georgia,"Times New Roman",serif; font-weight:400; }
+    h1 { font-size:52px; letter-spacing:-2px; margin:0 0 12px; }
+    h1 em { color:var(--accent); }
+    h2 { font-size:31px; letter-spacing:-.6px; margin:0 0 23px; }
+    h3 { font-size:18px; font-weight:600; margin:0 0 8px; }
+    p { margin:0 0 19px; }
+    .subtitle { color:var(--muted); margin-bottom:26px; }
+    .intro-grid { display:grid; grid-template-columns:minmax(0,1fr) 240px; gap:52px; align-items:start; }
+    .intro-copy { padding-top:3px; }
+    .intro-copy strong { font-weight:600; }
+    .intro-link { display:inline-block; margin-top:9px; border-bottom:1px solid var(--accent); }
+    .profile { margin:6px 0 0; }
+    .portrait-placeholder { aspect-ratio:4/5; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; background:var(--panel); border:1px solid var(--line); border-radius:5px; color:var(--muted); }
+    .monogram { font:italic 68px/1 Georgia,"Times New Roman",serif; color:var(--accent); }
+    .portrait-placeholder small { font-size:13px; }
+    .portrait { display:block; width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:5px; }
+    .profile-links { display:flex; gap:12px; flex-wrap:wrap; margin-top:17px; font-size:14px; }
+    .profile-link { border:1px solid var(--line); border-radius:5px; padding:4px 14px; color:var(--ink); }
+    .profile-link:hover { border-color:var(--accent); color:var(--accent); text-decoration:none; }
+    .profile-caption { margin-top:10px; color:var(--muted); font-size:14px; }
+    section { border-top:1px solid var(--line); margin-top:45px; padding-top:32px; }
+    .intro { border:0; margin-top:0; padding-top:0; }
+    .muted { color:var(--muted); }
+    .empty { color:var(--muted); margin-bottom:0; }
+    .news-row { display:grid; grid-template-columns:110px minmax(0,1fr); gap:24px; }
+    .news-row time { color:var(--muted); font-size:14px; padding-top:2px; }
+    .news-row p { margin:0; }
+    .section-heading { display:flex; align-items:baseline; justify-content:space-between; gap:16px; }
+    .section-heading span { font-size:13px; color:var(--muted); }
+    .publication { display:grid; grid-template-columns:150px minmax(0,1fr); gap:25px; margin:25px 0; }
+    .publication img { width:100%; border-radius:4px; }
+    .publication p { margin:4px 0; }
+    .publication .links { display:flex; gap:12px; flex-wrap:wrap; font-size:14px; }
+    .publication .venue { color:var(--muted); font-style:italic; font-size:15px; }
+    footer { margin-top:65px; padding:22px 0 28px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; }
+    .footer-row { display:flex; justify-content:space-between; gap:15px; flex-wrap:wrap; }
+    @media(max-width:700px) {
+      .wrap { width:calc(100% - 40px); }
+      .nav-row { padding-block:13px; align-items:flex-start; gap:14px; flex-direction:column; }
+      nav { width:100%; gap:10px 18px; }
+      .theme-toggle { margin-left:auto; }
+      main { padding-top:32px; }
+      h1 { font-size:44px; }
+      h2 { font-size:28px; }
+      .intro-grid { grid-template-columns:minmax(0,1fr); gap:24px; }
+      .profile { width:min(240px,100%); }
+      .portrait-placeholder,.portrait { aspect-ratio:1; }
+      section { margin-top:34px; padding-top:27px; }
+      .news-row { grid-template-columns:1fr; gap:3px; }
+      .publication { grid-template-columns:1fr; }
+      .publication img { max-width:250px; }
+      .section-heading { flex-wrap:wrap; gap:0; }
     }
-    h1 { margin-bottom: 0; }
-    h2 { margin-top: 36px; }
-    a { color: #1769aa; }
-    .subtitle { color: #666; }
+    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+    @media print { header,.skip-link { display:none; } body { background:white; color:black; } main { padding-top:0; } .wrap { width:100%; } a { color:inherit; } }
   </style>
 </head>
 <body>
-  <h1>Jing Ma</h1>
-  <p class="subtitle">Personal Academic Website</p>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header>
+    <div class="wrap nav-row">
+      <a class="wordmark" href="#about" aria-label="Jing Ma, home"><em>Jing</em> Ma</a>
+      <nav aria-label="Main navigation">
+        <a href="#about">About</a>
+        <a href="#research">Research</a>
+        <a href="#publications">Publications</a>
+        <a href="#notes">Notes</a>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark theme" title="Switch to dark theme"><span aria-hidden="true">◐</span></button>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap" id="main">
+    <section class="intro" id="about" aria-labelledby="name">
+      <h1 id="name"><em>Jing</em> Ma</h1>
+      <!-- 在下面填写真实身份和学校，例如 PhD Student · University Name。 -->
+      <p class="subtitle">Personal academic website</p>
+      <div class="intro-grid">
+        <div class="intro-copy">
+          <!-- 替换下面两段为你的英文简介。不要填写尚未确认的学历或经历。 -->
+          <p>Hi! I’m <strong>Jing Ma</strong>. Welcome to my personal academic website.</p>
+          <p>This is where I share my research, publications, and notes. More about my background and current work will be added soon.</p>
+          <p>You can find my code and projects on <a href="https://github.com/JingMa-research">GitHub</a>.</p>
+          <a class="intro-link" href="#research">Research interests</a>
+        </div>
+        <aside class="profile" aria-label="Profile">
+          <!-- 添加照片：上传 photo.jpg 到仓库最外层，再用下面这一行替换整个 portrait-placeholder div：
+          <img class="portrait" src="photo.jpg" alt="Portrait of Jing Ma" width="480" height="600">
+          -->
+          <div class="portrait-placeholder" role="img" aria-label="Portrait placeholder for Jing Ma">
+            <span class="monogram" aria-hidden="true">JM</span>
+            <small>Portrait forthcoming</small>
+          </div>
+          <div class="profile-links">
+            <a class="profile-link" href="https://github.com/JingMa-research">GitHub</a>
+            <!-- 提供真实链接后再添加 Email、Google Scholar 和 CV；避免无效按钮。 -->
+          </div>
+          <p class="profile-caption">Jing Ma</p>
+        </aside>
+      </div>
+    </section>
 
-  <h2>About</h2>
-  <p>Welcome to my website. My biography will be added soon.</p>
+    <section id="research" aria-labelledby="research-title">
+      <h2 id="research-title">Research Interests</h2>
+      <!-- 在此填写具体研究方向，可以使用 <strong>关键词</strong> 突出重点。 -->
+      <p class="empty">An overview of my research interests and current work will be added here.</p>
+    </section>
 
-  <h2>Research</h2>
-  <p>Details about my research interests will be added soon.</p>
+    <section id="updates" aria-labelledby="updates-title">
+      <h2 id="updates-title">Updates</h2>
+      <div class="news-row">
+        <time datetime="2026-10">Oct 2026</time>
+        <p>My personal website is now online!</p>
+      </div>
+      <!-- 以后新增动态：复制上面的 news-row，修改日期与内容，放到最前面。 -->
+    </section>
 
-  <h2>Publications</h2>
-  <p>My publication list will be added soon.</p>
+    <section id="publications" aria-labelledby="publications-title">
+      <h2 id="publications-title">Selected Publications</h2>
+      <p class="empty">Publication details will be added soon.</p>
+      <!-- 论文条目模板：填好真实资料和链接后，取消这段注释，并删除上面的占位句。
+      <article class="publication">
+        <img src="paper-figure.jpg" alt="Brief description of the research figure" loading="lazy">
+        <div>
+          <h3>YOUR PAPER TITLE</h3>
+          <p><strong>Jing Ma</strong>, COAUTHOR NAMES</p>
+          <p class="venue">JOURNAL OR CONFERENCE, YEAR</p>
+          <p class="links"><a href="PAPER_URL">Paper</a><a href="CODE_URL">Code</a></p>
+        </div>
+      </article>
+      -->
+    </section>
+
+    <section id="notes" aria-labelledby="notes-title">
+      <h2 id="notes-title">Notes &amp; Writing</h2>
+      <p class="empty">Research notes and technical articles will appear here.</p>
+    </section>
+  </main>
+  <footer class="wrap">
+    <div class="footer-row">
+      <span>© 2026 Jing Ma</span>
+      <a href="#about">Back to top</a>
+    </div>
+  </footer>
+  <script>
+    const themeButton = document.getElementById('theme-toggle');
+    function updateThemeLabel() {
+      const dark = document.documentElement.dataset.theme === 'dark';
+      const label = dark ? 'Switch to light theme' : 'Switch to dark theme';
+      themeButton.setAttribute('aria-label', label);
+      themeButton.title = label;
+    }
+    themeButton.addEventListener('click', () => {
+      const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = theme;
+      try { localStorage.setItem('jingma-theme', theme); } catch (_) {}
+      updateThemeLabel();
+    });
+    updateThemeLabel();
+  </script>
 </body>
 </html>
